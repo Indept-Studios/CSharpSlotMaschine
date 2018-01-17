@@ -44,7 +44,6 @@ namespace CSharpSlotMaschine
                 else
                 {
                     Console.WriteLine("Falsche Eingabe, bitte nur (J) für Ja oder (N) für Nein!");
-
                 }
 
             }
