@@ -21,9 +21,7 @@ namespace CSharpSlotMaschine
         //Hier beginnt dann die "Main"
         static void Main(string[] args)
         {
-
             Game();
-
 
             while (Token > 0)
             {
