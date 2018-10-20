@@ -1,42 +1,47 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CSharpSlotMaschine
+namespace Slotmachine
 {
     class Program
     {
-        //Variablen
-        public static int NumberA = 0;
-        public static int NumberB = 0;
-        public static int NumberC = 0;
-        public static int Token = 2;
-
-        //Erstellen der random Funktion
-        static Random random = new Random();
-
-
-        //Hier beginnt dann die "Main"
         static void Main(string[] args)
         {
+            //Erstellen der random Funktion
+            Random random = new Random();
+
+            //Variablen
+            int numberA = 0;
+            int numberB = 0;
+            int numberC = 0;
+            int token = 10;
+            int jackpot = 0;
+
+            //Constante Variablen
+            const int MIN_NUMBER = 5;
+            const int MAX_NUMBER = 9;
+
             Game();
 
-            while (Token > 0)
+            while (token > 0)
             {
                 Console.WriteLine("Weiterspielen? (J)a oder (N)ein?");
                 ConsoleKeyInfo info = Console.ReadKey();
                 Console.CursorLeft = 0;
 
+                //Abfrage der Eingabe
                 if (info.Key == ConsoleKey.J)
                 {
+                    Console.Clear();
                     Game();
                 }
                 else if (info.Key == ConsoleKey.N)
                 {
                     Console.Clear();
-                    Console.WriteLine("Herzlichen Glückwunsch, sie haben " + Token + " Token erspielt!");
+                    Console.WriteLine("Herzlichen Glückwunsch, sie haben " + token + " Token erspielt!");
                     Console.WriteLine("Nicht alles auf einmal Ausgeben");
                     Console.ReadKey();
                     return;
@@ -45,36 +50,52 @@ namespace CSharpSlotMaschine
                 {
                     Console.WriteLine("Falsche Eingabe, bitte nur (J) für Ja oder (N) für Nein!");
                 }
-
             }
+
             Console.Clear();
-            Console.WriteLine(NumberA + " " + NumberB + " " + NumberC);
+            Console.WriteLine(numberA + " " + numberB + " " + numberC);
             Console.WriteLine("Schade, keine Token mehr");
             Console.ReadKey();
-        }
 
-        private static void Game()
-        {
-            //Randomzahlen in A B und C setzen
-            NumberA = random.Next(1, 10);
-            NumberB = random.Next(1, 10);
-            NumberC = random.Next(1, 10);
-
-            // Ausgabe der Zahlen in einer Reihe
-            Console.WriteLine(NumberA + " " + NumberB + " " + NumberC);
-
-            if (NumberA == NumberB && NumberA == NumberC)
+            void Game()
             {
-                Token = Token + 10;
-            }
-            else if (NumberA == NumberB || NumberB == NumberC || NumberA == NumberC)
-            {
-                Token = Token + 5;
-            }
-            else
-                Token = Token - 1;
+                //Randomzahlen in A B und C setzen
+                numberA = random.Next(MIN_NUMBER, MAX_NUMBER);
+                numberB = random.Next(MIN_NUMBER, MAX_NUMBER);
+                numberC = random.Next(MIN_NUMBER, MAX_NUMBER);
 
-            Console.WriteLine("Du hast jetzt " + Token + " Token");
+                //Ausgabe der Zahlen in einer Reihe
+                Console.WriteLine(numberA + " " + numberB + " " + numberC);
+
+                //Abfrage sind Zahl A und B, A und C Identisch 
+                if (numberA == numberB && numberA == numberC)
+                {
+                    //Abfrage sind alle Zahlen 7
+                    if (numberA == 7 && numberB == 7 && numberC == 7)
+                    {
+                        Console.WriteLine("Herzlichen Glückwunsch der Jackpot von " + jackpot + " wurde geknackt");
+                        token = token + jackpot;
+                        jackpot = 0;
+                    }
+                    token = token + 10;
+                }
+
+                //Abfrage sind Zahlen A und B, B und C, und A und C Identisch
+                else if (numberA == numberB || numberB == numberC || numberA == numberC)
+                {
+                    token = token + 5;
+                }
+
+                //Ausführung wenn Abfrage 1 und 2 nicht zutreffen - keine Zahlen gleich
+                else
+                {
+                    token = token - 1;
+                    jackpot++;
+                }
+
+                Console.WriteLine("Du hast jetzt " + token + " Token");
+                Console.WriteLine("Der Jackpot beträgt derzeit " + jackpot + " Token");
+            }
         }
     }
 }
